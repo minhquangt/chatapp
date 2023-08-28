@@ -5,17 +5,20 @@ import { useAppDispatch } from '../../app/hooks';
 import { auth } from '../../config/firebase';
 import { toastNotiError, toastNotiSuccess } from '../../utils/toastNotifi';
 import { authActions } from './authSlice';
+import Loading from '../../components/Loading';
 export interface ILoginProps {}
 
 export default function Login(props: ILoginProps) {
     const navigate = useNavigate();
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [loading, setLoading] = React.useState<boolean>(false);
     const dispatch = useAppDispatch();
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
+            setLoading(true);
             const res = await signInWithEmailAndPassword(auth, email, password);
             const newUser = {
                 uid: res.user.uid || '',
@@ -28,6 +31,8 @@ export default function Login(props: ILoginProps) {
             navigate('/');
         } catch (err) {
             toastNotiError('Đăng nhập thất bại. Vui lòng thử lại.');
+        } finally {
+            setLoading(false);
         }
     };
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,6 +91,7 @@ export default function Login(props: ILoginProps) {
                     </div>
                 </div>
             </div>
+            <Loading loading={loading} />
         </div>
     );
 }

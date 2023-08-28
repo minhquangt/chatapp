@@ -12,7 +12,6 @@ export default function ProtectedRoute(props: IProtectedRouteProps) {
     const currentUser = useSelector(
         (state: RootState) => state.auth.currentUser
     );
-    console.log(currentUser);
 
     if (!currentUser) {
         return <Navigate to={'/login'} />;

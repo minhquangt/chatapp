@@ -7,27 +7,58 @@ import { doc, setDoc } from 'firebase/firestore';
 import { toastNotiError, toastNotiSuccess } from '../../utils/toastNotifi';
 import { useAppDispatch } from '../../app/hooks';
 import { authActions } from './authSlice';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import Loading from '../../components/Loading';
+
 export interface IRegisterProps {}
+type FormValues = {
+    name: string;
+    email: string;
+    password: string;
+};
+
+const schema = yup
+    .object({
+        name: yup
+            .string()
+            .required('Name is required')
+            .min(3, 'Password must be at least 3 character'),
+        email: yup
+            .string()
+            .required('Email is required')
+            .matches(
+                /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                'Please enter a valid email address'
+            ),
+        password: yup
+            .string()
+            .required('Password is required')
+            .min(1, 'Password must be at least 1 character'),
+    })
+    .required();
 
 export default function Register(props: IRegisterProps) {
     const navigate = useNavigate();
-    const [displayName, setDisplayName] = React.useState('');
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
     const [file, setFile] = React.useState<any>(null);
+    const [loading, setLoading] = React.useState<boolean>(false);
     const dispatch = useAppDispatch();
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm();
-    const onSubmit = (data: any) => console.log(data);
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
 
-    const handleSubmitt = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
+    const onSubmit: SubmitHandler<FormValues> = async ({
+        email,
+        name,
+        password,
+    }) => {
         try {
+            setLoading(true);
             //Create user in authentication
             const res = await createUserWithEmailAndPassword(
                 auth,
@@ -36,27 +67,27 @@ export default function Register(props: IRegisterProps) {
             );
             //Create a unique image name
             const date = new Date().getTime();
-            const storageRef = ref(storage, `${displayName + date}`);
+            const storageRef = ref(storage, `${name + date}`);
 
             await uploadBytesResumable(storageRef, file).then(() => {
                 getDownloadURL(storageRef).then(async (downloadURL) => {
                     try {
                         //Update profile
                         await updateProfile(res.user, {
-                            displayName,
+                            displayName: name,
                             photoURL: downloadURL,
                         });
                         //create user on firestore
                         await setDoc(doc(db, 'users', res.user.uid), {
                             uid: res.user.uid,
-                            displayName,
+                            displayName: name,
                             email,
                             photoURL: downloadURL,
                         });
                         const newUser = {
                             uid: res.user.uid || '',
                             photoURL: downloadURL,
-                            displayName: displayName,
+                            displayName: name,
                             email: email,
                         };
                         dispatch(authActions.registerSuccess(newUser));
@@ -74,9 +105,10 @@ export default function Register(props: IRegisterProps) {
         } catch (error) {
             toastNotiError('Đăng ký thất bại. Vui lòng thử lại.');
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
-    console.log(errors);
 
     return (
         <div className='flex items-center justify-center min-h-screen bg-gray-100'>
@@ -92,13 +124,12 @@ export default function Register(props: IRegisterProps) {
                                 type='text'
                                 className='w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500'
                                 id='name'
-                                {...register('name', {
-                                    required: true,
-                                    maxLength: 20,
-                                })}
+                                {...register('name')}
                             />
-                            {errors.name?.type === 'required' && (
-                                <p>Name is required</p>
+                            {errors.name && (
+                                <p className='text-sm text-red-600'>
+                                    {errors.name.message}
+                                </p>
                             )}
                         </div>
                         <div className='py-4'>
@@ -107,11 +138,13 @@ export default function Register(props: IRegisterProps) {
                                 type='text'
                                 className='w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500'
                                 id='email'
-                                {...register('email', {
-                                    required: true,
-                                    maxLength: 20,
-                                })}
-                            />
+                                {...register('email')}
+                            />{' '}
+                            {errors.email && (
+                                <p className='text-sm text-red-600'>
+                                    {errors.email.message}
+                                </p>
+                            )}
                         </div>
                         <div className='py-4'>
                             <span className='mb-2 text-md'>Password</span>
@@ -119,11 +152,13 @@ export default function Register(props: IRegisterProps) {
                                 type='password'
                                 id='pass'
                                 className='w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500'
-                                {...register('password', {
-                                    required: true,
-                                    maxLength: 20,
-                                })}
+                                {...register('password')}
                             />
+                            {errors.password && (
+                                <p className='text-sm text-red-600'>
+                                    {errors.password.message}
+                                </p>
+                            )}
                         </div>
                         <div className='py-4'>
                             <span className='mb-2 text-md'>Avatar</span>
@@ -139,7 +174,10 @@ export default function Register(props: IRegisterProps) {
                                 required
                             />
                         </div>
-                        <button className='w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-300'>
+                        <button
+                            disabled={loading}
+                            className='w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-300'
+                        >
                             Register
                         </button>
                     </form>
@@ -151,6 +189,7 @@ export default function Register(props: IRegisterProps) {
                     </div>
                 </div>
             </div>
+            <Loading loading={loading} />
         </div>
     );
 }

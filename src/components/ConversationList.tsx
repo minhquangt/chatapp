@@ -21,8 +21,6 @@ const ConversationList = () => {
             const unsub = onSnapshot(
                 doc(db, 'userChats', currentUser.uid),
                 (doc: any) => {
-                    console.log(doc.data());
-
                     setConversationList(doc.data());
                 }
             );
@@ -39,38 +37,31 @@ const ConversationList = () => {
         // dispatch({ type: 'CHANGE_USER', payload: u });
     };
 
-    console.log(conversationList);
-
     return (
         <div className='chats'>
-            {conversationList.length &&
-                Object.entries(conversationList)
-                    ?.sort(
-                        (a, b) =>
-                            new Date(b[1].date).valueOf() -
-                            new Date(a[1].date).valueOf()
-                    )
-                    .map((conversation) => (
-                        <div
-                            className='flex items-center gap-3 p-2 hover:bg-gray-200 cursor-pointer'
-                            key={conversation[0]}
-                            onClick={() =>
-                                handleSelect(conversation[1].userInfo)
-                            }
-                        >
-                            <img
-                                src={conversation[1].userInfo.photoURL}
-                                alt='avatar'
-                                className='w-[30px] h-[30px]'
-                            />
-                            <div className='userChatInfo'>
-                                <span>
-                                    {conversation[1].userInfo.displayName}
-                                </span>
-                                <p>{conversation[1].lastMessage?.text}</p>
-                            </div>
+            {Object.entries(conversationList)
+                ?.sort(
+                    (a, b) =>
+                        new Date(b[1].date).valueOf() -
+                        new Date(a[1].date).valueOf()
+                )
+                .map((conversation) => (
+                    <div
+                        className='flex items-center gap-3 p-2 hover:bg-gray-200 cursor-pointer'
+                        key={conversation[0]}
+                        onClick={() => handleSelect(conversation[1].userInfo)}
+                    >
+                        <img
+                            src={conversation[1].userInfo.photoURL}
+                            alt='avatar'
+                            className='w-[30px] h-[30px]'
+                        />
+                        <div className='userChatInfo'>
+                            <span>{conversation[1].userInfo.displayName}</span>
+                            <p>{conversation[1].lastMessage?.text}</p>
                         </div>
-                    ))}
+                    </div>
+                ))}
         </div>
     );
 };

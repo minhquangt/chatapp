@@ -1,16 +1,16 @@
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import * as React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { auth, db, storage } from '../../config/firebase';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { doc, setDoc } from 'firebase/firestore';
-import { toastNotiError, toastNotiSuccess } from '../../utils/toastNotifi';
-import { useAppDispatch } from '../../app/hooks';
-import { authActions } from './authSlice';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import * as React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
+import { useAppDispatch } from '../../app/hooks';
 import Loading from '../../components/Loading';
+import { auth, db, storage } from '../../config/firebase';
+import { toastNotiError, toastNotiSuccess } from '../../utils/toastNotifi';
+import { authActions } from './authSlice';
 
 export interface IRegisterProps {}
 type FormValues = {

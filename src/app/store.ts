@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counterSlice';
 import authReducer from '../features/auth/authSlice';
+import chatReducer from '../features/chat/chatSlice';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './rootSaga';
 import storage from 'redux-persist/lib/storage';
@@ -22,6 +23,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     counter: counterReducer,
     auth: authReducer,
+    chat: chatReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -6,7 +6,7 @@ interface ILoadingProps {
 
 const Loading = ({ loading }: ILoadingProps) => {
     return loading ? (
-        <div className='bg-gray-300 opacity-70 fixed top-0 left-0 right-0 bottom-0 '>
+        <div className='bg-gray-300 opacity-70 fixed top-0 left-0 right-0 bottom-0 z-10'>
             <div
                 role='status'
                 className='flex justify-center items-center w-full h-full'

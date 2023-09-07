@@ -8,11 +8,12 @@ export interface IHomeProps {}
 
 export default function Home(props: IHomeProps) {
     const chat = useSelector((state: RootState) => state.chat);
+    console.log(Object.keys(chat.user).length);
 
     return (
-        <div className=''>
+        <div className='lg:flex'>
             <Sidebar />
-            {Object.keys(chat.user).length && <Chat />}
+            {Object.keys(chat.user).length ? <Chat /> : null}
         </div>
     );
 }

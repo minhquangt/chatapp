@@ -4,9 +4,9 @@ import {
     Action,
     combineReducers,
 } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
 import authReducer from '../features/auth/authSlice';
 import chatReducer from '../features/chat/chatSlice';
+import menuReducer from '../features/menu/menuSlice';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './rootSaga';
 import storage from 'redux-persist/lib/storage';
@@ -21,9 +21,9 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-    counter: counterReducer,
     auth: authReducer,
     chat: chatReducer,
+    menu: menuReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

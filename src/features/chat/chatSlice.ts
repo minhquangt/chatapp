@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '../../types/User';
+import { UserInfo } from '../../types/Conversation';
 
 export interface ChatState {
     chatId: string;
-    user: User;
+    user: UserInfo;
 }
 
 const initialState: ChatState = {
@@ -15,7 +16,7 @@ export const chatSlice = createSlice({
     name: 'chat',
     initialState,
     reducers: {
-        changeUser: (state, action: PayloadAction<ChatState>) => {
+        setChatUser: (state, action: PayloadAction<ChatState>) => {
             state.user = action.payload.user;
             state.chatId = action.payload.chatId;
         },

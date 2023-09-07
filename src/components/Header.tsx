@@ -5,6 +5,8 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { useAppDispatch } from '../app/hooks';
 import { authActions } from '../features/auth/authSlice';
+import { capitalizeWords } from '../utils/capitalizeWords';
+import { menuActions } from '../features/menu/menuSlice';
 
 const Header = () => {
     const currentUser = useSelector(
@@ -15,9 +17,12 @@ const Header = () => {
         signOut(auth);
         dispatch(authActions.logout());
     };
+
     return (
         <div className='px-4 py-2 border-b-[1px]'>
-            <span className='text-2xl font-bold'>Chat App</span>
+            <div className='flex justify-between items-center'>
+                <span className='text-2xl font-bold'>Chat App</span>
+            </div>
             <div className='flex justify-between mt-3'>
                 <div className='flex gap-3 items-center'>
                     <img
@@ -25,7 +30,9 @@ const Header = () => {
                         alt='avatar'
                         className='w-[40px] h-[40px]'
                     />
-                    <span>{currentUser?.displayName}</span>
+                    <span className='font-bold'>
+                        {capitalizeWords(currentUser?.displayName as string)}
+                    </span>
                 </div>
                 <button
                     className='bg-black text-white px-2 rounded-lg'

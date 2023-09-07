@@ -20,28 +20,53 @@ const Message = ({ message }: MessageProps) => {
         ref.current?.scrollIntoView({ behavior: 'smooth' });
     }, [message]);
 
+    console.log('message', message);
+
     return (
         <div
             ref={ref}
-            className={`message ${
-                message?.senderId === currentUser?.uid && 'owner'
+            className={`mt-3 flex ${
+                message?.senderId !== currentUser?.uid && 'justify-end '
             }`}
         >
-            <div className='messageInfo'>
+            <div
+                className={`flex gap-2 items-center max-w-[80%] ${
+                    message?.senderId !== currentUser?.uid && 'flex-row-reverse'
+                }`}
+            >
                 <img
                     src={
                         message?.senderId === currentUser?.uid
                             ? currentUser.photoURL
                             : chat.user?.photoURL
                     }
-                    alt=''
+                    alt='avatar'
+                    className='w-[30px] h-[30px]'
                 />
-                <span>just now</span>
+                <div
+                    className={`inline-block rounded-lg px-2 py-2 ${
+                        message?.senderId !== currentUser?.uid
+                            ? 'bg-gray-300'
+                            : 'bg-blue-400'
+                    }`}
+                >
+                    {message.text && (
+                        <p
+                            className={`text-lg ${
+                                message?.senderId !== currentUser?.uid
+                                    ? 'text-black'
+                                    : 'text-white'
+                            }`}
+                        >
+                            {message.text}
+                        </p>
+                    )}
+                    {message.img && <img src={message.img} alt='' />}
+                </div>
             </div>
-            <div className='messageContent'>
-                {message.text && <p>{message.text}</p>}
-                {message.img && <img src={message.img} alt='' />}
-            </div>
+            {/* <div>
+                <span className='text-sm'>just now</span>
+            </div> */}
         </div>
     );
 };

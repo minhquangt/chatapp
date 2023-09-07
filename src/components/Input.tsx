@@ -17,6 +17,7 @@ import { User } from '../types/User';
 const Input = () => {
     const [text, setText] = useState('');
     const [img, setImg] = useState<any>(null);
+
     const currentUser = useSelector(
         (state: RootState) => state.auth.currentUser
     ) as User;
@@ -75,6 +76,8 @@ const Input = () => {
                 }),
             });
         }
+        setText('');
+        setImg(null);
 
         await updateDoc(doc(db, 'userChats', currentUser.uid), {
             [chat.chatId + '.lastMessage']: {
@@ -89,20 +92,38 @@ const Input = () => {
             },
             [chat.chatId + '.date']: serverTimestamp(),
         });
-
-        setText('');
-        setImg(null);
     };
-
+    const handleKeydown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.keyCode === 13) {
+            handleSend();
+        }
+    };
     return (
-        <div className='input'>
+        <div
+            className={`bg-white flex items-center justify-between px-4 py-2 border border-gray-300 fixed bottom-0 right-0 w-full lg:w-[calc(100%-250px)]`}
+        >
+            {img && (
+                <div className='relative w-[80px] h-[80px]'>
+                    <img
+                        src={img && URL.createObjectURL(img)}
+                        alt='imgSend'
+                        className='w-full h-full object-cover'
+                    />
+                    <i
+                        className='fa-regular fa-circle-xmark text-xl cursor-pointer fixed top-0 right-0 text-white'
+                        onClick={() => setImg(null)}
+                    ></i>
+                </div>
+            )}
             <input
                 type='text'
                 placeholder='Type something...'
                 onChange={(e) => setText(e.target.value)}
+                onKeyDown={handleKeydown}
                 value={text}
+                className={`outline-none py-2 w-full ${img && 'pl-4'}`}
             />
-            <div className='send'>
+            <div className='flex items-center gap-2'>
                 <input
                     type='file'
                     style={{ display: 'none' }}
@@ -113,9 +134,18 @@ const Input = () => {
                     }}
                 />
                 <label htmlFor='file'>
-                    <img src={Img} alt='' />
+                    <img
+                        src={Img}
+                        alt='file'
+                        className='w-[60px] lg:w-[50px] cursor-pointer'
+                    />
                 </label>
-                <button onClick={handleSend}>Send</button>
+                <button
+                    className='bg-black text-white rounded-md px-3 py-1'
+                    onClick={handleSend}
+                >
+                    Send
+                </button>
             </div>
         </div>
     );

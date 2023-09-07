@@ -5,6 +5,7 @@ import { RootState } from '../app/store';
 import { db } from '../config/firebase';
 import { MessageType } from '../types/Message';
 import Message from './Message';
+import Loading from './Loading';
 
 const MessageList = () => {
     const [messages, setMessages] = useState<MessageType[]>([]);
@@ -22,7 +23,8 @@ const MessageList = () => {
     console.log(messages);
 
     return (
-        <div className='messages'>
+        <div className='flex-1 p-4 mb-16 overflow-y-scroll'>
+            {/* {!messages.length && <Loading loading={true} />} */}
             {messages.map((m, index) => (
                 <Message message={m} key={index} />
             ))}

@@ -23,19 +23,19 @@ const schema = yup
     .object({
         name: yup
             .string()
-            .required('Name is required')
-            .min(3, 'Password must be at least 3 character'),
+            .required('Vui lòng nhập tên người dùng')
+            .min(3, 'Tên người dùng phải có ít nhất 3 ký tự'),
         email: yup
             .string()
-            .required('Email is required')
+            .required('Vui lòng nhập email')
             .matches(
                 /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                'Please enter a valid email address'
+                'Vui lòng nhập email hợp lệ'
             ),
         password: yup
             .string()
-            .required('Password is required')
-            .min(6, 'Password must be at least 1 character'),
+            .required('Vui lòng nhập mật khẩu')
+            .min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
     })
     .required();
 
@@ -115,11 +115,11 @@ export default function Register(props: IRegisterProps) {
             <div className='relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0'>
                 <div className='flex flex-col justify-center p-8 md:p-14'>
                     <span className='mb-3 text-4xl font-bold text-center'>
-                        Register
+                        Đăng ký
                     </span>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className='py-4'>
-                            <span className='mb-2 text-md'>Name</span>
+                            <span className='mb-2 text-md'>Tên người dùng</span>
                             <input
                                 type='text'
                                 className='w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500'
@@ -147,7 +147,7 @@ export default function Register(props: IRegisterProps) {
                             )}
                         </div>
                         <div className='py-4'>
-                            <span className='mb-2 text-md'>Password</span>
+                            <span className='mb-2 text-md'>Mật khẩu</span>
                             <input
                                 type='password'
                                 id='pass'
@@ -161,7 +161,7 @@ export default function Register(props: IRegisterProps) {
                             )}
                         </div>
                         <div className='py-4'>
-                            <span className='mb-2 text-md'>Avatar</span>
+                            <span className='mb-2 text-md'>Ảnh đại diện</span>
                             <input
                                 type='file'
                                 name='avatar'
@@ -178,13 +178,16 @@ export default function Register(props: IRegisterProps) {
                             disabled={loading}
                             className='w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-300'
                         >
-                            Register
+                            Đăng ký
                         </button>
                     </form>
                     <div className='text-center text-gray-400'>
-                        Already have an account?
+                        Bạn đã có tài khoản?
                         <Link to={'/login'}>
-                            <span className='font-bold text-black'> Login</span>
+                            <span className='font-bold text-black'>
+                                {' '}
+                                Đăng nhập
+                            </span>
                         </Link>
                     </div>
                 </div>

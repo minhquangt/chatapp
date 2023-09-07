@@ -38,7 +38,7 @@ const Header = () => {
                     className='bg-black text-white px-2 rounded-lg'
                     onClick={handleLogout}
                 >
-                    Logout
+                    Đăng xuất
                 </button>
             </div>
         </div>

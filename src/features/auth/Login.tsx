@@ -48,7 +48,7 @@ export default function Login(props: ILoginProps) {
             <div className='relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0'>
                 <div className='flex flex-col justify-center p-8 md:p-14'>
                     <span className='mb-3 text-4xl font-bold text-center'>
-                        Login
+                        Đăng nhập
                     </span>
                     <form onSubmit={handleSubmit}>
                         <div className='py-4'>
@@ -63,7 +63,7 @@ export default function Login(props: ILoginProps) {
                             />
                         </div>
                         <div className='py-4'>
-                            <span className='mb-2 text-md'>Password</span>
+                            <span className='mb-2 text-md'>Mật khẩu</span>
                             <input
                                 type='password'
                                 name='pass'
@@ -77,15 +77,15 @@ export default function Login(props: ILoginProps) {
                             type='submit'
                             className='w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-300'
                         >
-                            Login
+                            Đăng nhập
                         </button>
                     </form>
                     <div className='text-center text-gray-400'>
-                        Dont'have an account?
+                        Bạn chưa có tài khoản?
                         <Link to={'/register'}>
                             <span className='font-bold text-black'>
                                 {' '}
-                                Register
+                                Đăng ký
                             </span>
                         </Link>
                     </div>

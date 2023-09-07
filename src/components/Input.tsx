@@ -117,7 +117,7 @@ const Input = () => {
             )}
             <input
                 type='text'
-                placeholder='Type something...'
+                placeholder='Nhập gì đó...'
                 onChange={(e) => setText(e.target.value)}
                 onKeyDown={handleKeydown}
                 value={text}
@@ -144,7 +144,7 @@ const Input = () => {
                     className='bg-black text-white rounded-md px-3 py-1'
                     onClick={handleSend}
                 >
-                    Send
+                    Gửi
                 </button>
             </div>
         </div>
